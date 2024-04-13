@@ -42,7 +42,12 @@ def doLogin(request):
         else:
            messages.error(request,'Email and Password Are Invalid !')
            return redirect('login')
-		   
+
+def doLogin(request):
+    if request.method == "POST":
+        logout(request.user)
+       
+        return redirect('home')
 
 def profile(request):
     return render(request,'registration/profile.html')
