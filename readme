@@ -1,0 +1,225 @@
+// smtp server settings
+-------------------------------
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'Enter Email ID'
+EMAIL_HOST_PASSWORD = 'Enter Password'
+
+
+
+---------------------------------------------
+
+
+
+// Create Html Templates
+-----------------------------------
+-templates
+-- registration
+---- password_reset_form.html
+---- password_reset_done.html
+---- password_reset_confirm.html
+---- password_reset_complete.html
+
+
+
+// install django-crispy-forms
+-------------
+
+pip install django-crispy-forms
+
+// settings
+-------------
+INSTALLED_APPS = [
+    ......
+    'crispy_forms',
+]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+
+
+
+---------------------------------------------------
+// password_reset_form.html
+---------------------------
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+<!-- PAGE TITLE
+    ================================================== -->
+    <header class="py-8 py-md-11" style="background-image: none;">
+        <div class="container text-center py-xl-2">
+            <h1 class="display-4 fw-semi-bold mb-0">Forgot Password</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-scroll justify-content-center">
+                    <li class="breadcrumb-item">
+                        <a class="text-gray-800" href="#">
+                            Home
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-gray-800 active" aria-current="page">
+                        Forgot Password
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <!-- Img -->
+        <img class="d-none img-fluid" src="...html" alt="...">
+    </header>
+
+ <style>
+     .login_input{
+
+     }
+ </style>
+    <!-- LOGIN
+    ================================================== -->
+    <div class="container mb-11">
+        <div class="row gx-0">
+            <div class="col-md-7 col-xl-4 mx-auto">
+                <!-- Login -->
+                <h3 class="mb-6">Log In to Your Skola Account!</h3>
+                {% include 'components/msg.html' %}
+                <!-- Form Login -->
+                     <form method="post">
+                    {% csrf_token %}
+
+                    <!-- Email -->
+                    <div class="form-group mb-5">
+                        <label>{{field.label_tag}}</label>
+                         <p>{{ form|crispy }}</p>
+                    </div>
+
+
+
+
+                    <!-- Submit -->
+                    <button class="btn btn-block btn-primary" type="submit">
+                        SEND CONFIRMATION LINK
+                    </button>
+                </form>
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+----------------------------------------------------------------------------------------
+password_reset_done.html
+-------------------------
+{% extends 'base.html' %}
+{% block content %}
+<br>
+<br>
+<div class="container mt-4">
+    <div class="col-sm-6">
+        <h2 class="display-4">Reset Password</h2>
+        <p>I have mailed you instruction for resetting your password</p>
+        <p>if you have didn't recive it verified you entered the correct email and / or check your spam folder</p>
+    </div>
+</div>
+<br>
+<br>
+{% endblock %}
+
+
+
+---------------------------------------------------------------------------------------
+password_reset_confirm.html
+-----------------------------
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+<!-- PAGE TITLE
+    ================================================== -->
+    <header class="py-8 py-md-11" style="background-image: none;">
+        <div class="container text-center py-xl-2">
+            <h1 class="display-4 fw-semi-bold mb-0">Forgot Password</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-scroll justify-content-center">
+                    <li class="breadcrumb-item">
+                        <a class="text-gray-800" href="#">
+                            Home
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item text-gray-800 active" aria-current="page">
+                        Forgot Password
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <!-- Img -->
+        <img class="d-none img-fluid" src="...html" alt="...">
+    </header>
+
+ <style>
+     .login_input{
+
+     }
+ </style>
+    <!-- LOGIN
+    ================================================== -->
+    <div class="container mb-11">
+        <div class="row gx-0">
+            <div class="col-md-7 col-xl-4 mx-auto">
+                <!-- Login -->
+                <h3 class="mb-6">Log In to Your Skola Account!</h3>
+                {% include 'components/msg.html' %}
+                <!-- Form Login -->
+                     <form method="post">
+                    {% csrf_token %}
+                     <div class="form-group mb-5">
+                        <label>{{field.label_tag}}</label>
+                         <p>{{ form|crispy }}</p>
+                    </div>
+
+
+
+                    <!-- Submit -->
+                    <button class="btn btn-block btn-primary" type="submit">
+                        SEND CONFIRMATION LINK
+                    </button>
+                </form>
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+---------------------------------------------------------------------------------------------
+password_reset_complete.html
+----------------------------
+{% extends 'base.html' %}
+{% block content %}
+<br>
+<br>
+<div class="container">
+    <div class="col-sm-8">
+        <h2 class="display-4">Password has been Changed</h2>
+        <p>You May Go Ahead and login now </p>
+        <a href="{% url 'login' %}" class="btn btn-success" style="width:20%;">Login</a>
+    </div>
+</div>
+<br>
+<br>
+{% endblock %}
+
+
