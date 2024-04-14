@@ -43,10 +43,12 @@ def doLogin(request):
            messages.error(request,'Email and Password Are Invalid !')
            return redirect('login')
 
-def doLogin(request):
-    if request.method == "POST":
+def doLogout(request):
+    if request.user.is_authenticated:
         logout(request.user)
        
+        return redirect('home')
+    else:
         return redirect('home')
 
 def profile(request):

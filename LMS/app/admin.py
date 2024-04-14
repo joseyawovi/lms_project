@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Categories, Author,Course,Level, What_you_learn, Requirements,Video,Lesson
+from .models import *
 
 # Register your models here.
 class What_you_learn_TabularInline(admin.TabularInline):
@@ -24,3 +24,5 @@ admin.site.register(What_you_learn)
 admin.site.register(Requirements)
 admin.site.register(Video)
 admin.site.register(Lesson)
+admin.site.register(Language)
+admin.site.register(UserCourse)

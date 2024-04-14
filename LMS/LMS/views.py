@@ -1,14 +1,15 @@
 from django.shortcuts import redirect, render
-from app.models import Categories,Course,Level
+from app.models import Categories,Course,Level, Video, UserCourse
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 
+from django.db.models import Avg,Sum
 def base(request):
     return render(request,'base.html')
 
 def home(request):
    
-    category = Categories.objects.all().order_by('id')[0:5]
+    category = Categories.objects.all().order_by('id')[0:6]
     course = Course.objects.filter(status = 'PUBLISH').order_by('-id')
 
     context = {
@@ -88,21 +89,29 @@ def search_course(request):
     }
     return render(request,'search/search.html',context)
 
-def course_detail(request,slug):
-    
-    course = Course.objects.filter(slug=slug)
+from django.shortcuts import render, redirect
+from django.db.models import Sum
+
+def course_detail(request, slug):
     category = Categories.get_all_category()
-    
-    if course.exists():
-        course = course.first()
-    else:
-        return redirect('404')
-    
+    time_duration = Video.objects.filter(course__slug=slug).aggregate(sum=Sum('time_duration'))
+
+    try:
+        course = Course.objects.get(slug=slug)  # Get the course object
+        check_enroll = UserCourse.objects.get(user=request.user, course=course)
+    except Course.DoesNotExist:
+        return redirect('404')  # Redirect if course does not exist
+    except UserCourse.DoesNotExist:
+        check_enroll = None
+
     context = {
-        'course':course,
-        'category':category
+        'course': course,
+        'category': category,
+        'time_duration': time_duration['sum'] if time_duration['sum'] else 0,
+        'check_enroll': check_enroll
     }
-    return render(request,'course/course_detail.html',context)
+    return render(request, 'course/course_detail.html', context)
+
 
 def page_not_found(request):
     category = Categories.get_all_category()
@@ -111,3 +120,19 @@ def page_not_found(request):
         'category':category
     }
     return render(request,'error/404.html',context)
+
+
+def checkout(request,slug):
+    course =Course.objects.get(slug=slug)
+    
+    if course.price == 0:
+        course = UserCourse(
+            user = request.user,
+            course = course
+        )
+        course.save()
+        redirect('home')
+    return render(request, 'checkout/checkout.html') 
+
+def my_course(request):
+    return render(request,'course/my_course.html')    
